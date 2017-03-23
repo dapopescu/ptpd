@@ -2463,6 +2463,14 @@ parseConfig ( int opCode, void *opArg, dictionary* dict, RunTimeOpts *rtOpts )
 			snprintf(rtOpts->lockFile, PATH_MAX,
 				"%s/%s", rtOpts->lockDirectory, DEFAULT_LOCKFILE_NAME);
 	}
+	/********ADDED BY DIANA**************/
+	parseResult &= configMapInt(opCode, opArg, dict, target, "ptp_general_port",
+		PTPD_RESTART_PROTOCOL, INTTYPE_U16, &rtOpts->ptpGeneralPort, rtOpts->ptpGeneralPort,
+		"PTP general port number\n", RANGECHECK_RANGE, 0,65535);
+	parseResult &= configMapInt(opCode, opArg, dict, target, "ptp_event_port",
+		PTPD_RESTART_PROTOCOL, INTTYPE_U16, &rtOpts->ptpEventPort, rtOpts->ptpEventPort,
+		"PTP event port number\n", RANGECHECK_RANGE, 0,65535);
+
 
 /* ==== END additional logic */
 
@@ -2722,12 +2730,15 @@ Boolean loadCommandLineOptions(RunTimeOpts* rtOpts, dictionary* dict, int argc, 
 	    {"unicast",		optional_argument, 0, 'U'},
 	    {"unicast-negotiation",		optional_argument, 0, 'g'},
 	    {"unicast-destinations",		required_argument, 0, 'u'},
+		/****** ADDED BY DIANA ********/
+	    {"ptp-general-port",optional_argument, 0, 'j'},
+	    {"ptp-event-port", 	optional_argument, 0, 'z'},
 	    {0,			0		 , 0, 0}
 	};
 
-	while ((c = getopt_long(argc, argv, "?c:kb:i:d:sgmGMWyUu:nf:S:r:DvCVHTt:he:Y:tOLEPAaR:l:p", long_options, &opt_index)) != -1) {
+	while ((c = getopt_long(argc, argv, "?c:kb:i:d:sgmGMWyUu:nf:S:r:DvCVHTt:he:Y:tOLEPAaR:l:p:jz", long_options, &opt_index)) != -1) {
 #else
-	while ((c = getopt(argc, argv, "?c:kb:i:d:sgmGMWyUu:nf:S:r:DvCVHTt:he:Y:tOLEPAaR:l:p")) != -1) {
+	while ((c = getopt(argc, argv, "?c:kb:i:d:sgmGMWyUu:nf:S:r:DvCVHTt:he:Y:tOLEPAaR:l:p:jz")) != -1) {
 #endif
 	    switch(c) {
 /* non-config options first */
@@ -2892,6 +2903,13 @@ short_help:
 		/* Lock directory */
 		case 'R':
 			dictionary_set(dict,"global:lock_directory", optarg);
+			break;
+		/*******ADDED BY DIANA**********/
+		case 'j':
+			dictionary_set(dict, "ptp_general_port", optarg);
+			break;
+		case 'z':
+			dictionary_set(dict, "ptp_event_port", optarg);
 			break;
 		default:
 			break;

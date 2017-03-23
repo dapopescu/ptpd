@@ -466,7 +466,12 @@ typedef struct {
 	Enumeration8 timingAclOrder;
 	Enumeration8 managementAclOrder;
 
+	/********ADDED BY DIANA******/
+	int ptpGeneralPort;
+	int ptpEventPort;
+
 } RunTimeOpts;
+
 
 
 /**

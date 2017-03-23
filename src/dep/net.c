@@ -1215,13 +1215,13 @@ netInit(NetPath * netPath, RunTimeOpts * rtOpts, PtpClock * ptpClock)
 		}
 
 		addr.sin_family = AF_INET;
-		addr.sin_port = htons(PTP_EVENT_PORT);
+		addr.sin_port = htons(rtOpts->ptpEventPort);
 		if (bind(netPath->eventSock, (struct sockaddr *)&addr,
 			sizeof(struct sockaddr_in)) < 0) {
 			PERROR("failed to bind event socket");
 			return FALSE;
 		}
-		addr.sin_port = htons(PTP_GENERAL_PORT);
+		addr.sin_port = htons(rtOpts->ptpGeneralPort);
 		if (bind(netPath->generalSock, (struct sockaddr *)&addr,
 			sizeof(struct sockaddr_in)) < 0) {
 			PERROR("failed to bind general socket");
@@ -1881,7 +1881,7 @@ netSendEvent(Octet * buf, UInteger16 length, NetPath * netPath,
 	struct sockaddr_in addr;
 
 	addr.sin_family = AF_INET;
-	addr.sin_port = htons(PTP_EVENT_PORT);
+	addr.sin_port = htons(rtOpts->ptpEventPort);
 
 #if defined(__QNXNTO__) && defined(PTPD_EXPERIMENTAL)
 	TimeInternal tmpTime;
@@ -2023,7 +2023,7 @@ netSendGeneral(Octet * buf, UInteger16 length, NetPath * netPath,
 	struct sockaddr_in addr;
 
 	addr.sin_family = AF_INET;
-	addr.sin_port = htons(PTP_GENERAL_PORT);
+	addr.sin_port = htons(rtOpts->ptpGeneralPort);
 
 #ifdef PTPD_PCAP
 	if ((netPath->pcapGeneral != NULL) && (rtOpts->transport == IEEE_802_3)) {
@@ -2094,7 +2094,7 @@ netSendPeerGeneral(Octet * buf, UInteger16 length, NetPath * netPath, const RunT
 	struct sockaddr_in addr;
 
 	addr.sin_family = AF_INET;
-	addr.sin_port = htons(PTP_GENERAL_PORT);
+	addr.sin_port = htons(rtOpts->ptpGeneralPort);
 
 #ifdef PTPD_PCAP
 	if ((netPath->pcapGeneral != NULL) && (rtOpts->transport == IEEE_802_3)) {
@@ -2159,7 +2159,7 @@ netSendPeerEvent(Octet * buf, UInteger16 length, NetPath * netPath, const RunTim
 	struct sockaddr_in addr;
 
 	addr.sin_family = AF_INET;
-	addr.sin_port = htons(PTP_EVENT_PORT);
+	addr.sin_port = htons(rtOpts->ptpEventPort);
 
 #ifdef PTPD_PCAP
 	if ((netPath->pcapGeneral != NULL) && (rtOpts->transport == IEEE_802_3)) {
