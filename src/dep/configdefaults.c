@@ -442,6 +442,8 @@ loadDefaultSettings( RunTimeOpts* rtOpts )
 	// by default we don't check Sync message sequence continuity
 	rtOpts->syncSequenceChecking = FALSE;
 	rtOpts->clockUpdateTimeout = 0;
+	rtOpts->ptpGeneralPort = 320;
+	rtOpts->ptpEventPort = 319;
 
 }
 

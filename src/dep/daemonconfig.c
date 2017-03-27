@@ -467,7 +467,6 @@ configMapInt(int opCode, void *opArg,  dictionary *dict, dictionary *target, con
 	} else {
 		char buf[50];
 		int userVar = iniparser_getint(dict,key,def);
-
 		switch(intType) {
 		    case INTTYPE_INT:
 			*(int*)var = userVar;
@@ -502,7 +501,6 @@ configMapInt(int opCode, void *opArg,  dictionary *dict, dictionary *target, con
 		    printf("%s = %s\n", key,buf);
 		}
 		ret = checkRangeInt(dict, key, rangeFlags, minBound, maxBound);
-
 		if(!ret && !(opCode & CFGOP_PARSE_QUIET)) {
 		    switch(rangeFlags) {
 			case RANGECHECK_RANGE:
@@ -2465,12 +2463,11 @@ parseConfig ( int opCode, void *opArg, dictionary* dict, RunTimeOpts *rtOpts )
 	}
 	/********ADDED BY DIANA**************/
 	parseResult &= configMapInt(opCode, opArg, dict, target, "ptp_general_port",
-		PTPD_RESTART_PROTOCOL, INTTYPE_U16, &rtOpts->ptpGeneralPort, rtOpts->ptpGeneralPort,
+		PTPD_RESTART_NETWORK, INTTYPE_U16, &rtOpts->ptpGeneralPort, rtOpts->ptpGeneralPort,
 		"PTP general port number\n", RANGECHECK_RANGE, 0,65535);
 	parseResult &= configMapInt(opCode, opArg, dict, target, "ptp_event_port",
-		PTPD_RESTART_PROTOCOL, INTTYPE_U16, &rtOpts->ptpEventPort, rtOpts->ptpEventPort,
+		PTPD_RESTART_NETWORK, INTTYPE_U16, &rtOpts->ptpEventPort, rtOpts->ptpEventPort,
 		"PTP event port number\n", RANGECHECK_RANGE, 0,65535);
-
 
 /* ==== END additional logic */
 
@@ -2731,18 +2728,17 @@ Boolean loadCommandLineOptions(RunTimeOpts* rtOpts, dictionary* dict, int argc, 
 	    {"unicast-negotiation",		optional_argument, 0, 'g'},
 	    {"unicast-destinations",		required_argument, 0, 'u'},
 		/****** ADDED BY DIANA ********/
-	    {"ptp-general-port",optional_argument, 0, 'j'},
-	    {"ptp-event-port", 	optional_argument, 0, 'z'},
+	    {"ptp-general-port",required_argument, 0, 'j'},
+	    {"ptp-event-port", 	required_argument, 0, 'z'},
 	    {0,			0		 , 0, 0}
 	};
-
-	while ((c = getopt_long(argc, argv, "?c:kb:i:d:sgmGMWyUu:nf:S:r:DvCVHTt:he:Y:tOLEPAaR:l:p:jz", long_options, &opt_index)) != -1) {
+	while ((c = getopt_long(argc, argv, "?c:kb:i:d:sgmGMWyUu:nf:S:r:DvCVHTt:he:Y:tOLEPAaR:l:pj:z:", long_options, &opt_index)) != -1) {
 #else
-	while ((c = getopt(argc, argv, "?c:kb:i:d:sgmGMWyUu:nf:S:r:DvCVHTt:he:Y:tOLEPAaR:l:p:jz")) != -1) {
+	while ((c = getopt(argc, argv, "?c:kb:i:d:sgmGMWyUu:nf:S:r:DvCVHTt:he:Y:tOLEPAaR:l:pj:z:")) != -1) {
 #endif
 	    switch(c) {
 /* non-config options first */
-
+	
 		/* getopt error or an actual ? */
 		case '?':
 			printf("Run "PTPD_PROGNAME" with -h to see available command-line options.\n");
