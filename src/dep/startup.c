@@ -470,7 +470,7 @@ checkSignals(RunTimeOpts * rtOpts, PtpClock * ptpClock)
 	sigusr1_received = 0;
 	}
 
-	if(sigusr2_received){
+//	if(sigusr2_received){
 
 /* testing only: testing step detection */
 #if 0
@@ -506,7 +506,7 @@ checkSignals(RunTimeOpts * rtOpts, PtpClock * ptpClock)
 		}
 #endif /* PTPD_STATISTICS */
 		sigusr2_received = 0;
-	}
+//	}
 
 }
 
